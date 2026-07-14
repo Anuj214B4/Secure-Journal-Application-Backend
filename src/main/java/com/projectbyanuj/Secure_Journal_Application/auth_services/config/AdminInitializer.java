@@ -24,6 +24,7 @@ public class AdminInitializer {
             if (!userRepository.existsByRole(Role.ADMIN) &&
                     !userRepository.existsAppUserByEmail("admin@gmail.com")){
                 AppUser admin = AppUser.builder()
+                        .fullName("Application Administration")
                         .username("admin")
                         .email("admin@gmail.com")
                         .password(passwordEncoder.encode("admin"))
