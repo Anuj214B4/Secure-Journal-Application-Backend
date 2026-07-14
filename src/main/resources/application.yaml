@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: Secure-Journal-Application
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/secure-journal-application
+    username: root
+    password: Anuj@2002
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+server:
+  port: 8081
