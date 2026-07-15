@@ -1,5 +1,6 @@
 package com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.requestes;
 
+import com.projectbyanuj.Secure_Journal_Application.auth_services.entity.AppUser;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;

@@ -5,6 +5,7 @@ import com.projectbyanuj.Secure_Journal_Application.auth_services.security.JwtAu
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,10 +23,23 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()
-                        .requestMatchers("/auth/create-admin/**").hasRole("ADMIN")
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/createAdmin")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/categories/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/categories/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/tags/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/tags/**")
+                        .hasRole("ADMIN")
                         .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated());
         http.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint));

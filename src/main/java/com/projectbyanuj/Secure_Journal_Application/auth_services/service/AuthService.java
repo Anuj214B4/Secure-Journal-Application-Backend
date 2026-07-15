@@ -28,16 +28,12 @@ public class AuthService {
 
     public String signup(SignupRequest signupRequest) {
 
-        if(userRepository.findUserByUsername(signupRequest.getUsername()).isPresent()){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username is already in use");
-        }
         if(userRepository.findUserByEmail(signupRequest.getEmail()).isPresent()){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email is already in use");
         }
 
         AppUser user = AppUser.builder()
                 .fullName(signupRequest.getFullName())
-                .username(signupRequest.getUsername())
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .role(Role.USER)
@@ -49,16 +45,13 @@ public class AuthService {
     }
 
     public String createAdmin(SignupRequest signupRequest) {
-        if(userRepository.findUserByUsername(signupRequest.getUsername()).isPresent()){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username is already in use");
-        }
+
         if(userRepository.findUserByEmail(signupRequest.getEmail()).isPresent()){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email is already in use");
         }
 
         AppUser user = AppUser.builder()
                 .fullName(signupRequest.getFullName())
-                .username(signupRequest.getUsername())
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .role(Role.ADMIN)
@@ -69,12 +62,16 @@ public class AuthService {
 
     public AuthResponse login(SigningRequest request) {
         this.doAuthentication(request);
-        UserDetails userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
-        String jwtToken = jwtAuthUtil.generateToken(userDetails);
+        CustomUserDetails userDetails =
+                (CustomUserDetails) appUserDetailsService
+                        .loadUserByUsername(request.getEmail());
+
+        String token = jwtAuthUtil.generateToken(userDetails);
 
         return AuthResponse.builder()
-                .token(jwtToken)
-                .email(userDetails.getUsername())
+                .token(token)
+                .email(userDetails.getEmail())
+                .role(userDetails.getAuthorities().iterator().next().getAuthority())
                 .build();
     }
 

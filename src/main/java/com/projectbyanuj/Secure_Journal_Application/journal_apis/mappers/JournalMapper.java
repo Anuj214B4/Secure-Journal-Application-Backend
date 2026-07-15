@@ -1,5 +1,6 @@
 package com.projectbyanuj.Secure_Journal_Application.journal_apis.mappers;
 
+import com.projectbyanuj.Secure_Journal_Application.auth_services.entity.AppUser;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.requestes.JournalRequest;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.responses.JournalResponse;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.entity.Journal;
@@ -19,6 +20,7 @@ public class JournalMapper {
                 .id(journal.getId())
                 .title(journal.getTitle())
                 .description(journal.getDescription())
+                .owner_id(journal.getOwner().getUserId())
                 .build();
 
     }

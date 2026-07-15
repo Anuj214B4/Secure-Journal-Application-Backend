@@ -13,4 +13,6 @@ public class JournalResponse {
     private String title;
 
     private String description;
+
+    private Long owner_id;
 }

@@ -18,10 +18,6 @@ public class SignupRequest {
     @Size(min = 3, max = 80, message = "Username must be between 3 and 80 characters.")
     private String fullName;
 
-    @NotBlank(message = "Username is required.")
-    @Size(min = 3, max = 15, message = "Username must be between 3 and 15 characters.")
-    private String username;
-
     @NotBlank(message = "Email is required.")
     @Email(message = "Enter a valid email address.")
     private String email;
