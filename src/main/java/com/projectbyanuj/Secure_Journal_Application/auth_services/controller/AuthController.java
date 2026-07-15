@@ -4,6 +4,7 @@ import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.AuthRespo
 import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.SigningRequest;
 import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.SignupRequest;
 import com.projectbyanuj.Secure_Journal_Application.auth_services.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.signup(signupRequest));
@@ -28,14 +29,14 @@ public class AuthController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createAdmin")
-    public ResponseEntity<String> createAdmin(@RequestBody SignupRequest signupRequest){
+    public ResponseEntity<String> createAdmin(@Valid @RequestBody SignupRequest signupRequest){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.createAdmin(signupRequest));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> login(@RequestBody SigningRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody SigningRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

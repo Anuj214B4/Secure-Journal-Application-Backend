@@ -12,6 +12,8 @@ spring:
       ddl-auto: update
 
     show-sql: true
+jwt:
+  secret: ThisIsMyVeryLongRandom256BitSecretKeyThisIsMyVeryLongRandom256BitSecretKey
 
 server:
   port: 8081

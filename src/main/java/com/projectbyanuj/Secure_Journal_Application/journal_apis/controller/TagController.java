@@ -3,6 +3,7 @@ package com.projectbyanuj.Secure_Journal_Application.journal_apis.controller;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.requestes.TagRequest;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.responses.TagResponse;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.service.TagService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class TagController {
     private final TagService tagService;
 
     @PostMapping
-    public ResponseEntity<TagResponse> createTag(@RequestBody TagRequest tagRequest) {
+    public ResponseEntity<TagResponse> createTag(@Valid @RequestBody TagRequest tagRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(tagService.createTag(tagRequest));
     }
@@ -29,7 +30,7 @@ public class TagController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TagResponse> updateTag(@PathVariable Long id,
-                                                 @RequestBody TagRequest tagRequest) {
+                                                 @Valid @RequestBody TagRequest tagRequest) {
         return ResponseEntity.ok(tagService.updateTag(id,tagRequest));
     }
 

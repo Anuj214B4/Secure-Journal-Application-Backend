@@ -43,7 +43,7 @@ public class JournalController {
 
     //    PUT /api/journal/{id}
     @PutMapping("/journal/{id}")
-    public ResponseEntity<JournalResponse> updateJournalById(@RequestBody JournalRequest request,
+    public ResponseEntity<JournalResponse> updateJournalById(@Valid @RequestBody JournalRequest request,
                                                              @PathVariable Long id,
                                                              @AuthenticationPrincipal CustomUserDetails currentUser) {
         return new ResponseEntity<>(journalService.updateJournalById(request, id, currentUser), HttpStatus.OK);

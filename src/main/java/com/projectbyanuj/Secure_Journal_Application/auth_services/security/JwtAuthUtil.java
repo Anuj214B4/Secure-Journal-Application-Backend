@@ -2,6 +2,7 @@ package com.projectbyanuj.Secure_Journal_Application.auth_services.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +15,11 @@ import java.util.Map;
 public class JwtAuthUtil {
     public final long TOKEN_VALIDITY = 5 * 60 * 60;
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+
     private SecretKey getSecretKey() {
-        String SECRET_KEY = "mysupersecretkeyforjwtauthmysupersecretkeyforjwtauthmysupersecretkeyforjwtauth";
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public String doGenerateToken(Map<String, Object> claims, String email) {

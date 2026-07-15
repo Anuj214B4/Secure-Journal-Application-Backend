@@ -3,6 +3,7 @@ package com.projectbyanuj.Secure_Journal_Application.journal_apis.controller;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.requestes.CategoryRequest;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.responses.CategoryResponse;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> addCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<CategoryResponse> addCategory(@Valid @RequestBody CategoryRequest categoryRequest){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(categoryService.addCategory(categoryRequest));

@@ -3,6 +3,7 @@ package com.projectbyanuj.Secure_Journal_Application.journal_apis.controller;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.requestes.CommentRequest;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.dtos.responses.CommentResponse;
 import com.projectbyanuj.Secure_Journal_Application.journal_apis.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommentResponse> createComment(@RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentResponse> createComment(@Valid @RequestBody CommentRequest commentRequest) {
         return ResponseEntity.ok(commentService.createComment(commentRequest));
     }
 
@@ -28,7 +29,8 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long id, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long id,
+                                                         @Valid @RequestBody CommentRequest commentRequest) {
         return ResponseEntity.ok(commentService.updateComment(id,commentRequest));
     }
 
