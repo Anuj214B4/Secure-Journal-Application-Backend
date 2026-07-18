@@ -1,6 +1,7 @@
 package com.projectbyanuj.Secure_Journal_Application.auth_services.service;
 
 import com.projectbyanuj.Secure_Journal_Application.auth_services.entity.AppUser;
+import com.projectbyanuj.Secure_Journal_Application.auth_services.exception.UnauthorizedException;
 import com.projectbyanuj.Secure_Journal_Application.auth_services.repository.UserRepository;
 import com.projectbyanuj.Secure_Journal_Application.exceptipns.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,27 +19,23 @@ public class CurrentUserService {
 
     public AppUser getCurrentUser() {
 
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "User is not authenticated");
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new UnauthorizedException("User is not authenticated.");
         }
 
-        CustomUserDetails user =
-                (CustomUserDetails) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
 
-        if (user == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Invalid authentication");
+        if (!(principal instanceof CustomUserDetails user)) {
+            throw new UnauthorizedException("Invalid authentication.");
         }
 
         return userRepository.findUserByEmail(user.getEmail())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                        new ResourceNotFoundException("User not found."));
     }
 }
