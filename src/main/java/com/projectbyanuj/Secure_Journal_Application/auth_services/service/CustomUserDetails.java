@@ -1,7 +1,6 @@
 package com.projectbyanuj.Secure_Journal_Application.auth_services.service;
 
 import com.projectbyanuj.Secure_Journal_Application.auth_services.entity.AppUser;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,44 +8,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
-public class CustomUserDetails implements UserDetails {
+public record CustomUserDetails(AppUser appUser) implements UserDetails {
 
-    private final Long userId;
-    private final String email;
-    private final String fullName;
-    private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
-
-    public CustomUserDetails(AppUser user) {
-
-        this.userId = user.getUserId();
-        this.email = user.getEmail();
-        this.fullName = user.getFullName();
-        this.password = user.getPassword();
-
-        this.authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-        );
+    public Long getUserId() {
+        return appUser.getUserId();
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public String getEmail() {
+        return appUser.getEmail();
     }
 
-    /**
-     * Login identifier.
-     * Change this to email if you want email login.
-     */
+    public String getFullName() {
+        return appUser.getFullName();
+    }
+
     @Override
     public String getUsername() {
-        return email;
+        return appUser.getEmail();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return appUser.getPassword();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(
+                new SimpleGrantedAuthority("ROLE_" + appUser.getRole().name())
+        );
     }
 
     @Override
