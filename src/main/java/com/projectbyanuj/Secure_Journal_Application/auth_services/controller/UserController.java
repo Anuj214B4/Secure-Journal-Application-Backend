@@ -18,6 +18,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
         return ResponseEntity.ok(Map.of(
                 "name", currentUser.getFullName(),
+                "email", currentUser.getUsername(),
                 "role", Objects.requireNonNull(currentUser.getAuthorities().iterator().next().getAuthority()).replace("ROLE_", "")
         ));
     }

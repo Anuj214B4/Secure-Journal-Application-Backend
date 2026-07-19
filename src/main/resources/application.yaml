@@ -15,5 +15,13 @@ spring:
 jwt:
   secret: ThisIsMyVeryLongRandom256BitSecretKeyThisIsMyVeryLongRandom256BitSecretKey
 
+  access-token:
+#    15 mints
+    expiration-ms: 900000
+
+  refresh-token:
+#    15 days
+    expiration-ms: 1296000000
+
 server:
   port: 8081

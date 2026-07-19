@@ -2,6 +2,7 @@ package com.projectbyanuj.Secure_Journal_Application.auth_services.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,17 @@ import java.util.Map;
 
 @Component
 public class JwtAuthUtil {
-    public final long TOKEN_VALIDITY = 5 * 60 * 60;
+
+    @Value("${jwt.access-token.expiration-ms}")
+    private long accessTokenExpirationMs;
 
     @Value("${jwt.secret}")
     private String secretKey;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Access token expiration: " + accessTokenExpirationMs);
+    }
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
@@ -28,7 +36,7 @@ public class JwtAuthUtil {
                 .subject(email)
                 .claims(claims)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
                 .compact();
 
     }

@@ -41,10 +41,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         try {
             email = jwtAuthUtil.getEmailFromToken(token);
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             logger.info("Illegal Argument while fetching the email.");
         } catch (ExpiredJwtException ex) {
-            logger.warn("Given Jwt token is expired.");
+            logger.warn("Given Jwt token is expired: {}", ex.getMessage());
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+                        {
+                            "success": false,
+                            "message": "Access token expired. Please refresh your token."
+                        }
+                    """);
+
+            return;
         } catch (MalformedJwtException ex) {
             logger.info("Some changed has done in token ! Invalid Token.");
         } catch (Exception e) {
@@ -55,7 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             //load user by email
             UserDetails userDetails = this.appUserDetailsService.loadUserByUsername(email);
 
-            if(this.jwtAuthUtil.validateToken(token, userDetails)) {
+            if (this.jwtAuthUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -1,5 +1,6 @@
 package com.projectbyanuj.Secure_Journal_Application.auth_services.dtos;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthResponse {
-    private String accessToken;
+public class RefreshTokenRequest {
+
+    @NotBlank(message = "Refresh token is required.")
     private String refreshToken;
-    private String email;
-    private String role;
 }

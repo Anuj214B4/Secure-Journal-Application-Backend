@@ -1,9 +1,6 @@
 package com.projectbyanuj.Secure_Journal_Application.auth_services.controller;
 
-import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.ApiResponse;
-import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.AuthResponse;
-import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.SigningRequest;
-import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.SignupRequest;
+import com.projectbyanuj.Secure_Journal_Application.auth_services.dtos.*;
 import com.projectbyanuj.Secure_Journal_Application.auth_services.entity.Role;
 import com.projectbyanuj.Secure_Journal_Application.auth_services.service.AuthService;
 import jakarta.validation.Valid;
@@ -40,5 +37,15 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody SigningRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(authService.refreshAccessToken(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(authService.logout(request));
     }
 }
